@@ -1,9 +1,0 @@
-# Never commit the Firestore security rules file to this public repo.
-# It's not required for the site to work (Firebase reads rules from
-# the Firebase Console, not from your website files) — keep it local
-# only and paste it into Firebase Console > Firestore Database > Rules.
-firestore.rules
-
-# OS/editor junk
-.DS_Store
-Thumbs.db
