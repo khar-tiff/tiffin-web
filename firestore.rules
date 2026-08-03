@@ -1,0 +1,69 @@
+rules_version = '2';
+
+// How this works:
+// - applications is where a NEW customer's form submission lands first.
+//   Anyone can create an application (no login needed to apply).
+//   Only the admin can read/update/delete applications (to review them).
+// - Once the admin approves an application, the admin creates the
+//   customer's login and their real record at registrations/{their uid}.
+// - A customer can read their own registrations doc, and can update it,
+//   but CANNOT change status, deliveryStage, or plan themselves (only
+//   the admin can)  -  this stops a customer from self-approving.
+// - Each customer has:
+//     registrations/{uid}/messages/{id}    -> live chat with support
+//     registrations/{uid}/extraOrders/{id} -> extra dish orders
+//   the customer can read/create in their own thread; the admin can
+//   read/create in any thread, and only the admin can mark an order paid.
+// - The admin is identified by their Firebase UID (a random id, not an
+//   email), so it is safe to keep this file in a public repo.
+// - subscribers is a write-only collection for the newsletter signup
+//   form: anyone can add an entry, only the admin can read the list.
+
+// Get your UID from: Firebase Console, Authentication, Users tab,
+// find your admin account row, copy the User UID value, then
+// paste it below in place of PASTE_YOUR_ADMIN_UID_HERE
+
+function isAdmin() {
+  return request.auth != null && request.auth.uid == "1OHWnuFUHKOMA6UB9WcuJaqH5ub2";
+}
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /applications/{appId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /registrations/{uid} {
+      allow create: if isAdmin();
+      allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
+      allow update: if request.auth != null && (
+        isAdmin() ||
+        (request.auth.uid == uid &&
+          request.resource.data.status == resource.data.status &&
+          request.resource.data.deliveryStage == resource.data.deliveryStage &&
+          request.resource.data.plan == resource.data.plan)
+      );
+      allow delete: if isAdmin();
+
+      match /messages/{messageId} {
+        allow read, create: if request.auth != null &&
+                                (request.auth.uid == uid || isAdmin());
+        allow update, delete: if false;
+      }
+
+      match /extraOrders/{orderId} {
+        allow read, create: if request.auth != null &&
+                                (request.auth.uid == uid || isAdmin());
+        allow update: if isAdmin();
+        allow delete: if isAdmin();
+      }
+    }
+
+    match /subscribers/{subId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

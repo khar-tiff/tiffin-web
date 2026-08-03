@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TiffinX Admin</title>
+<style>
+  body{font-family:system-ui,Arial,sans-serif;background:#FBF7EC;color:#262B33;margin:0;padding:0 24px 40px;}
+  h1{font-size:20px;} h2{font-size:16px;margin:0 0 10px;} h3{font-size:14px;margin:16px 0 8px;}
+  #loginBox{max-width:340px;margin:60px auto;background:#fff;padding:24px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08);}
+  #loginBox input{width:100%;padding:10px;margin:6px 0 14px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;}
+  #loginBox button{width:100%;padding:10px;background:#5FA83D;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;}
+  #err{color:#b3261e;font-size:13px;min-height:18px;}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-bottom:20px;}
+  th,td{padding:9px 11px;text-align:left;border-bottom:1px solid #eee;font-size:13.5px;vertical-align:top;}
+  th{background:#262B33;color:#fff;position:sticky;top:0;}
+  tr:last-child td{border-bottom:none;}
+  tr.clickable{cursor:pointer;} tr.clickable:hover{background:#f7f4ea;}
+  select,input.inline{padding:5px;border-radius:4px;border:1px solid #ccc;}
+  #topbar{position:sticky;top:0;background:#FBF7EC;z-index:5;padding:24px 0 12px;display:flex;justify-content:space-between;align-items:center;}
+  #enableNotif{padding:8px 14px;border-radius:6px;border:1px solid #262B33;background:#fff;cursor:pointer;}
+  #logoutBtn{padding:8px 14px;border-radius:6px;border:none;background:#262B33;color:#fff;cursor:pointer;}
+  .statbar{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+  .stat{background:#fff;border-radius:8px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .stat b{display:block;font-size:22px;} .stat span{font-size:12px;color:#7B838F;}
+  .tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+  .tab{padding:8px 16px;border-radius:20px;border:1px solid #262B33;background:#fff;cursor:pointer;font-size:13.5px;font-weight:600;}
+  .tab.active{background:#262B33;color:#fff;}
+  .tabpanel{display:none;} .tabpanel.active{display:block;}
+  .badge{padding:3px 9px;border-radius:11px;font-size:11.5px;font-weight:600;}
+  .badge.new{background:#fff3cd;color:#8a6d00;} .badge.approved{background:#d4edda;color:#1e7e34;} .badge.rejected{background:#fdecea;color:#b3261e;}
+  .btn2{padding:6px 12px;border-radius:6px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;}
+  .btn2.green{background:#5FA83D;color:#fff;} .btn2.red{background:#b3261e;color:#fff;} .btn2.gray{background:#eee;color:#333;}
+  #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:10;}
+  .sidePanel{position:fixed;top:0;right:0;height:100%;width:440px;max-width:94vw;background:#fff;z-index:11;box-shadow:-4px 0 20px rgba(0,0,0,.15);padding:20px;overflow-y:auto;display:none;}
+  .sidePanel .close{float:right;cursor:pointer;font-size:18px;background:none;border:none;}
+  .editRow{margin-bottom:9px;} .editRow label{display:block;font-size:11.5px;color:#7B838F;margin-bottom:2px;}
+  .editRow input, .editRow select, .editRow textarea{width:100%;box-sizing:border-box;padding:7px;border-radius:5px;border:1px solid #ddd;font-family:inherit;font-size:13px;}
+  #chatBox{border:1px solid #eee;border-radius:6px;padding:8px;height:200px;overflow-y:auto;margin:10px 0;background:#fafafa;}
+  .msg{margin:5px 0;display:flex;} .msg.admin{justify-content:flex-end;}
+  .msg span{max-width:80%;padding:7px 11px;border-radius:10px;font-size:13px;}
+  .msg.admin span{background:#262B33;color:#fff;} .msg.customer span{background:#eee;color:#222;}
+  #chatReplyRow{display:flex;gap:6px;}
+  #chatReplyRow input{flex:1;padding:8px;border-radius:6px;border:1px solid #ddd;}
+  .searchRow{margin-bottom:14px;display:flex;gap:8px;}
+  .searchRow input{flex:1;padding:9px;border-radius:6px;border:1px solid #ccc;}
+  .genPwRow{display:flex;gap:6px;align-items:center;}
+</style>
+</head>
+<body>
+
+<div id="loginBox">
+  <h1>TiffinX Admin Login</h1>
+  <input id="adminEmail" type="email" placeholder="admin email">
+  <input id="adminPassword" type="password" placeholder="password">
+  <button onclick="adminLogin()">Log In</button>
+  <div id="err"></div>
+</div>
+
+<div id="panel" style="display:none;">
+  <div id="topbar">
+    <h1>TiffinX Admin</h1>
+    <div>
+      <button id="enableNotif">🔔 Enable notifications</button>
+      <button id="logoutBtn" onclick="adminLogout()">Log Out</button>
+    </div>
+  </div>
+
+  <div class="statbar" id="statBar"></div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="applications" onclick="switchTab('applications')">📥 New Applications</div>
+    <div class="tab" data-tab="customers" onclick="switchTab('customers')">👥 Customers</div>
+    <div class="tab" data-tab="cases" onclick="switchTab('cases')">🚩 Open Cases</div>
+    <div class="tab" data-tab="orders" onclick="switchTab('orders')">🥘 Extra Orders</div>
+  </div>
+
+  <div class="tabpanel active" id="tab-applications">
+    <p style="font-size:13px;color:#7B838F;">New sign-ups waiting for your review. Approve to create their login, or reject.</p>
+    <table>
+      <thead><tr><th>Received</th><th>Name</th><th>Phone</th><th>Area</th><th>Plan</th><th>Veg</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="appRows"></tbody>
+    </table>
+  </div>
+
+  <div class="tabpanel" id="tab-customers">
+    <div class="searchRow">
+      <input id="customerSearch" type="text" placeholder="Search by name, phone, or area..." oninput="renderCustomerRows()">
+      <select id="statusFilter" onchange="renderCustomerRows()">
+        <option value="">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="active">Active</option>
+        <option value="paused">Paused</option>
+      </select>
+    </div>
+    <table>
+      <thead><tr><th>Since</th><th>Name</th><th>Phone</th><th>Area</th><th>Plan</th><th>Veg</th><th>Status</th></tr></thead>
+      <tbody id="custRows"></tbody>
+    </table>
+  </div>
+
+  <div class="tabpanel" id="tab-cases">
+    <p style="font-size:13px;color:#7B838F;">Customers who sent extra info / requests that may need your attention.</p>
+    <table>
+      <thead><tr><th>Name</th><th>Phone</th><th>Note from customer</th><th></th></tr></thead>
+      <tbody id="caseRows"></tbody>
+    </table>
+  </div>
+
+  <div class="tabpanel" id="tab-orders">
+    <p style="font-size:13px;color:#7B838F;">Extra dish orders across all customers. Mark paid once you've confirmed the UPI payment.</p>
+    <table>
+      <thead><tr><th>When</th><th>Customer</th><th>Dish</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="orderRows"></tbody>
+    </table>
+  </div>
+</div>
+
+<div id="overlay" onclick="closeAllPanels()"></div>
+
+<!-- Approve application panel -->
+<div class="sidePanel" id="approvePanel">
+  <button class="close" onclick="closeAllPanels()">✕</button>
+  <h2>Approve Application</h2>
+  <div id="approveBody"></div>
+  <div class="editRow">
+    <label>Login email (from application)</label>
+    <input id="approveEmail" type="email" class="inline" disabled>
+  </div>
+  <div class="editRow">
+    <label>Set a password for this customer</label>
+    <div class="genPwRow">
+      <input id="approvePassword" type="text" placeholder="At least 6 characters">
+      <button class="btn2 gray" onclick="generatePassword()">Generate</button>
+    </div>
+  </div>
+  <button class="btn2 green" style="width:100%;padding:10px;margin-top:10px;" onclick="approveApplication()">Approve &amp; Create Login</button>
+  <div id="approveResult" style="font-size:13px;margin-top:10px;"></div>
+</div>
+
+<!-- Customer detail / edit panel -->
+<div class="sidePanel" id="detailPanel">
+  <button class="close" onclick="closeAllPanels()">✕</button>
+  <h2>Customer Profile</h2>
+  <div id="detailEditBody"></div>
+  <button class="btn2 green" style="width:100%;padding:10px;margin-top:6px;" onclick="saveProfileEdits()">Save Changes</button>
+  <div id="saveNote" style="font-size:12.5px;margin-top:6px;"></div>
+
+  <h3>💬 Chat</h3>
+  <div id="chatBox"></div>
+  <div id="chatReplyRow">
+    <input id="chatReplyInput" type="text" placeholder="Reply to customer..." onkeydown="if(event.key==='Enter'){sendAdminReply();}">
+    <button class="btn2 green" onclick="sendAdminReply()">Send</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { auth, db, firebaseConfig } from "./js/firebase-config.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword }
+  from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+import { collection, collectionGroup, query, orderBy, onSnapshot, doc, setDoc, updateDoc, deleteDoc, addDoc, serverTimestamp, getDocs, limit }
+  from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+const STATUS_STAGE = { pending: 0, confirmed: 1, active: 2, paused: 1 };
+function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+// ---------- Login ----------
+window.adminLogin = async function(){
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  const err = document.getElementById('err');
+  err.textContent = '';
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (e) {
+    err.textContent = 'Login failed: check email/password, and that this account exists in Firebase Authentication.';
+  }
+};
+window.adminLogout = function(){ signOut(auth); };
+
+function playBeep(){
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = 880;
+    g.gain.setValueAtTime(0.15, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + 0.4);
+  } catch(e){}
+}
+document.getElementById('enableNotif').addEventListener('click', () => Notification.requestPermission());
+
+// ---------- Tabs ----------
+window.switchTab = function(name){
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tabpanel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
+};
+
+window.closeAllPanels = function(){
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('approvePanel').style.display = 'none';
+  document.getElementById('detailPanel').style.display = 'none';
+  if (unsubChat) { unsubChat(); unsubChat = null; }
+  currentUid = null; currentApp = null;
+};
+
+// ---------- Live data stores (kept in sync, redraw tables from these) ----------
+let applications = {};   // id -> data
+let customers = {};      // uid -> data
+let allOrders = [];       // {uid, id, ...data}
+let firstAppLoad = true, firstCustLoad = true;
+
+function renderStats(){
+  const newApps = Object.values(applications).filter(a => (a.applicationStatus||'new') === 'new').length;
+  const totalCust = Object.keys(customers).length;
+  const active = Object.values(customers).filter(c => c.status === 'active').length;
+  const unpaidOrders = allOrders.filter(o => o.status !== 'paid').length;
+  document.getElementById('statBar').innerHTML = `
+    <div class="stat"><b>${newApps}</b><span>New applications</span></div>
+    <div class="stat"><b>${totalCust}</b><span>Total customers</span></div>
+    <div class="stat"><b>${active}</b><span>Active plans</span></div>
+    <div class="stat"><b>${unpaidOrders}</b><span>Unpaid extra orders</span></div>
+  `;
+}
+
+// ---------- Applications tab ----------
+function renderAppRows(){
+  const tbody = document.getElementById('appRows');
+  tbody.innerHTML = '';
+  Object.entries(applications)
+    .filter(([id, a]) => (a.applicationStatus || 'new') === 'new')
+    .forEach(([id, a]) => {
+      const when = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleString() : '-';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${when}</td><td>${escapeHtml(a.name)}</td><td>${escapeHtml(a.phone)}</td>
+        <td>${escapeHtml(a.area)}</td><td>${escapeHtml(a.plan)}</td><td>${escapeHtml(a.vegType)}</td>
+        <td><span class="badge new">New</span></td>
+        <td>
+          <button class="btn2 green" onclick="openApprove('${id}')">Approve</button>
+          <button class="btn2 red" onclick="rejectApplication('${id}')">Reject</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  renderStats();
+}
+
+window.rejectApplication = async function(id){
+  if (!confirm('Reject this application?')) return;
+  await updateDoc(doc(db, "applications", id), { applicationStatus: 'rejected' });
+};
+
+let currentApp = null;
+window.openApprove = function(id){
+  currentApp = id;
+  const a = applications[id];
+  const meals = [a.meals?.breakfast && 'Breakfast', a.meals?.lunch && 'Lunch', a.meals?.dinner && 'Dinner'].filter(Boolean).join(', ');
+  document.getElementById('approveBody').innerHTML = `
+    <div class="editRow"><b>${escapeHtml(a.name)}</b></div>
+    <div class="editRow">Phone: ${escapeHtml(a.phone)}</div>
+    <div class="editRow">Address: ${escapeHtml(a.address)}, ${escapeHtml(a.area)}</div>
+    <div class="editRow">Plan: ${escapeHtml(a.plan)} | Meals: ${meals} | ${escapeHtml(a.vegType)}</div>
+    <div class="editRow">Notes: ${escapeHtml(a.notes) || '-'}</div>
+  `;
+  document.getElementById('approveEmail').value = a.email || '';
+  document.getElementById('approvePassword').value = '';
+  document.getElementById('approveResult').textContent = '';
+  document.getElementById('overlay').style.display = 'block';
+  document.getElementById('approvePanel').style.display = 'block';
+};
+
+window.generatePassword = function(){
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  let pw = '';
+  for (let i = 0; i < 8; i++) pw += chars[Math.floor(Math.random() * chars.length)];
+  document.getElementById('approvePassword').value = pw;
+};
+
+window.approveApplication = async function(){
+  const id = currentApp;
+  const a = applications[id];
+  const email = document.getElementById('approveEmail').value.trim();
+  const password = document.getElementById('approvePassword').value;
+  const result = document.getElementById('approveResult');
+  if (!password || password.length < 6) { result.style.color = '#b3261e'; result.textContent = 'Password must be at least 6 characters.'; return; }
+
+  result.style.color = '#333';
+  result.textContent = 'Creating account...';
+  try {
+    // Use a SECOND, separate Firebase app instance to create the customer's
+    // login. This avoids signing the admin out of their own session, which
+    // is what would happen if we used the primary auth instance here.
+    const secondaryApp = initializeApp(firebaseConfig, 'AdminCreateUser-' + Date.now());
+    const secondaryAuth = getAuth(secondaryApp);
+    const cred = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+    const newUid = cred.user.uid;
+    await signOut(secondaryAuth); // clean up the secondary session, admin stays logged in
+
+    await setDoc(doc(db, "registrations", newUid), {
+      name: a.name, phone: a.phone, address: a.address, area: a.area, email: a.email,
+      vegType: a.vegType, meals: a.meals, plan: a.plan, deliveryTime: a.deliveryTime,
+      notes: a.notes, extraInfo: '', status: 'confirmed', deliveryStage: STATUS_STAGE.confirmed,
+      createdAt: serverTimestamp()
+    });
+    await updateDoc(doc(db, "applications", id), { applicationStatus: 'approved', linkedUid: newUid });
+
+    result.style.color = '#1e7e34';
+    result.innerHTML = `Account created.<br><b>Send these to the customer:</b><br>Email: ${escapeHtml(email)}<br>Password: ${escapeHtml(password)}`;
+  } catch (err) {
+    console.error(err);
+    result.style.color = '#b3261e';
+    result.textContent = err.message || 'Could not create the account.';
+  }
+};
+
+// ---------- Customers tab ----------
+window.renderCustomerRows = function(){
+  const tbody = document.getElementById('custRows');
+  const search = (document.getElementById('customerSearch').value || '').toLowerCase();
+  const statusFilter = document.getElementById('statusFilter').value;
+  tbody.innerHTML = '';
+  Object.entries(customers).forEach(([uid, d]) => {
+    if (statusFilter && d.status !== statusFilter) return;
+    const hay = `${d.name} ${d.phone} ${d.area}`.toLowerCase();
+    if (search && !hay.includes(search)) return;
+    const when = d.createdAt?.toDate ? d.createdAt.toDate().toLocaleDateString() : '-';
+    const tr = document.createElement('tr');
+    tr.className = 'clickable';
+    tr.innerHTML = `
+      <td>${when}</td><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.phone)}</td>
+      <td>${escapeHtml(d.area)}</td><td>${escapeHtml(d.plan)}</td><td>${escapeHtml(d.vegType)}</td>
+      <td><select onclick="event.stopPropagation()" onchange="updateStatus('${uid}', this.value)">
+            <option value="pending" ${d.status==='pending'?'selected':''}>Pending</option>
+            <option value="confirmed" ${d.status==='confirmed'?'selected':''}>Confirmed</option>
+            <option value="active" ${d.status==='active'?'selected':''}>Active</option>
+            <option value="paused" ${d.status==='paused'?'selected':''}>Paused</option>
+          </select></td>`;
+    tr.addEventListener('click', () => openDetail(uid));
+    tbody.appendChild(tr);
+  });
+};
+
+window.updateStatus = async function(uid, status){
+  await updateDoc(doc(db, "registrations", uid), { status, deliveryStage: STATUS_STAGE[status] ?? 0 });
+};
+
+// ---------- Cases tab ----------
+function renderCaseRows(){
+  const tbody = document.getElementById('caseRows');
+  tbody.innerHTML = '';
+  Object.entries(customers).filter(([uid, d]) => d.extraInfo).forEach(([uid, d]) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.phone)}</td><td>${escapeHtml(d.extraInfo)}</td>
+      <td><button class="btn2 gray" onclick="openDetail('${uid}')">Open</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ---------- Orders tab ----------
+function renderOrderRows(){
+  const tbody = document.getElementById('orderRows');
+  tbody.innerHTML = '';
+  allOrders.slice().sort((a,b) => (b.createdAt?.toMillis?.()||0) - (a.createdAt?.toMillis?.()||0)).forEach(o => {
+    const cust = customers[o.uid];
+    const when = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString() : '-';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${when}</td><td>${escapeHtml(cust?.name || o.uid)}</td><td>${escapeHtml(o.dish)}</td>
+      <td>Rs ${o.price}</td>
+      <td><span class="badge ${o.status==='paid'?'approved':'new'}">${o.status==='paid'?'Paid':'Awaiting payment'}</span></td>
+      <td>${o.status!=='paid' ? `<button class="btn2 green" onclick="markOrderPaid('${o.uid}','${o.id}')">Mark Paid</button>` : ''}</td>`;
+    tbody.appendChild(tr);
+  });
+  renderStats();
+}
+window.markOrderPaid = async function(uid, orderId){
+  await updateDoc(doc(db, "registrations", uid, "extraOrders", orderId), { status: 'paid' });
+};
+
+// ---------- Customer detail / edit + chat ----------
+let unsubChat = null;
+let currentUid = null;
+
+window.openDetail = function(uid){
+  currentUid = uid;
+  const d = customers[uid];
+  if (!d) return;
+  document.getElementById('detailEditBody').innerHTML = `
+    <div class="editRow"><label>Name</label><input id="edName" value="${escapeHtml(d.name)}"></div>
+    <div class="editRow"><label>Phone</label><input id="edPhone" value="${escapeHtml(d.phone)}"></div>
+    <div class="editRow"><label>Email</label><input id="edEmail" value="${escapeHtml(d.email)}" disabled></div>
+    <div class="editRow"><label>Address</label><input id="edAddress" value="${escapeHtml(d.address)}"></div>
+    <div class="editRow"><label>Area</label><input id="edArea" value="${escapeHtml(d.area)}"></div>
+    <div class="editRow"><label>Plan</label>
+      <select id="edPlan">
+        <option ${d.plan==='Single Meal (Trial)'?'selected':''}>Single Meal (Trial)</option>
+        <option ${d.plan==='Full Day Plan'?'selected':''}>Full Day Plan</option>
+        <option ${d.plan==='Monthly Subscription'?'selected':''}>Monthly Subscription</option>
+        <option ${d.plan==='Custom / Catering'?'selected':''}>Custom / Catering</option>
+      </select>
+    </div>
+    <div class="editRow"><label>Veg / Non-veg</label>
+      <select id="edVeg">
+        <option value="veg" ${d.vegType==='veg'?'selected':''}>Veg</option>
+        <option value="nonveg" ${d.vegType==='nonveg'?'selected':''}>Non-Veg</option>
+        <option value="both" ${d.vegType==='both'?'selected':''}>Both</option>
+      </select>
+    </div>
+    <div class="editRow"><label>Notes</label><textarea id="edNotes" rows="2">${escapeHtml(d.notes)}</textarea></div>
+    <div class="editRow"><label>Extra info from customer (read-only)</label><div style="font-size:13px;">${escapeHtml(d.extraInfo) || '(none)'}</div></div>
+  `;
+  document.getElementById('saveNote').textContent = '';
+  document.getElementById('overlay').style.display = 'block';
+  document.getElementById('detailPanel').style.display = 'block';
+
+  if (unsubChat) unsubChat();
+  const q = query(collection(db, "registrations", uid, "messages"), orderBy("createdAt", "asc"));
+  unsubChat = onSnapshot(q, (snap) => {
+    const box = document.getElementById('chatBox');
+    box.innerHTML = '';
+    snap.forEach(docSnap => {
+      const m = docSnap.data();
+      const row = document.createElement('div');
+      row.className = 'msg ' + (m.from === 'admin' ? 'admin' : 'customer');
+      row.innerHTML = `<span>${escapeHtml(m.text)}</span>`;
+      box.appendChild(row);
+    });
+    box.scrollTop = box.scrollHeight;
+  });
+};
+
+window.saveProfileEdits = async function(){
+  if (!currentUid) return;
+  const note = document.getElementById('saveNote');
+  try {
+    await updateDoc(doc(db, "registrations", currentUid), {
+      name: document.getElementById('edName').value.trim(),
+      phone: document.getElementById('edPhone').value.trim(),
+      address: document.getElementById('edAddress').value.trim(),
+      area: document.getElementById('edArea').value.trim(),
+      plan: document.getElementById('edPlan').value,
+      vegType: document.getElementById('edVeg').value,
+      notes: document.getElementById('edNotes').value.trim()
+    });
+    note.style.color = '#1e7e34';
+    note.textContent = 'Saved.';
+  } catch (err) {
+    note.style.color = '#b3261e';
+    note.textContent = 'Could not save changes.';
+  }
+};
+
+window.sendAdminReply = async function(){
+  if (!currentUid) return;
+  const input = document.getElementById('chatReplyInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  await addDoc(collection(db, "registrations", currentUid, "messages"), { from: 'admin', text, createdAt: serverTimestamp() });
+};
+
+// ---------- Live listeners (start once we've confirmed this account is the admin) ----------
+let unsubApps = null, unsubCust = null, unsubOrdersAll = null;
+
+onAuthStateChanged(auth, async (user) => {
+  [unsubApps, unsubCust, unsubOrdersAll].forEach(u => u && u());
+  if (!user) {
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('panel').style.display = 'none';
+    return;
+  }
+
+  // Any valid email/password will pass Firebase Auth sign-in -- including a
+  // customer's own account. Firestore rules already block a non-admin from
+  // reading admin data, but we still need to check that HERE before showing
+  // the panel UI at all, otherwise a customer (or anyone already logged in
+  // on this browser) would see an empty-but-visible admin shell. We do this
+  // by attempting one admin-only read and requiring it to succeed.
+  try {
+    await getDocs(query(collection(db, "applications"), limit(1)));
+  } catch (err) {
+    await signOut(auth);
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('panel').style.display = 'none';
+    document.getElementById('err').textContent = 'This account is not an admin account. If you are a customer, please log in from the main site instead.';
+    return;
+  }
+
+  document.getElementById('loginBox').style.display = 'none';
+  document.getElementById('panel').style.display = 'block';
+  firstAppLoad = true; firstCustLoad = true;
+
+  unsubApps = onSnapshot(query(collection(db, "applications"), orderBy("createdAt", "desc")), (snap) => {
+    applications = {};
+    snap.forEach(d => applications[d.id] = d.data());
+    renderAppRows();
+    if (!firstAppLoad) {
+      snap.docChanges().forEach(c => {
+        if (c.type === 'added') {
+          playBeep();
+          if (Notification.permission === 'granted') {
+            new Notification('New TiffinX application', { body: `${c.doc.data().name} - ${c.doc.data().area} - ${c.doc.data().plan}` });
+          }
+        }
+      });
+    }
+    firstAppLoad = false;
+  }, (err) => { console.error('applications listener error:', err); });
+
+  unsubCust = onSnapshot(query(collection(db, "registrations"), orderBy("createdAt", "desc")), (snap) => {
+    customers = {};
+    snap.forEach(d => customers[d.id] = d.data());
+    renderCustomerRows();
+    renderCaseRows();
+    renderStats();
+    if (!firstCustLoad) {
+      snap.docChanges().forEach(c => { if (c.type === 'added') playBeep(); });
+    }
+    firstCustLoad = false;
+  }, (err) => { console.error('registrations listener error:', err); });
+
+  unsubOrdersAll = onSnapshot(collectionGroup(db, "extraOrders"), (snap) => {
+    allOrders = [];
+    snap.forEach(d => allOrders.push({ uid: d.ref.parent.parent.id, id: d.id, ...d.data() }));
+    renderOrderRows();
+  }, (err) => { console.error('orders listener error (you may need to create a Firestore index - check the browser console for a link):', err); });
+});
+</script>
+</body>
+</html>
