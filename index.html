@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TiffinX — Fresh. Healthy. Hygienic.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Work+Sans:wght@400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rough.js/4.6.6/rough.js"></script>
+</head>
+<body>
+
+<div class="binder" id="binder"></div>
+
+<header>
+  <div class="nav">
+    <div class="brand"><img src="images/logo.png" alt="TiffinX logo"></div>
+    <nav class="navlinks" id="navlinks">
+      <a href="#home" onclick="closeMobile()">Home</a>
+      <a href="#why" onclick="closeMobile()">Why Us</a>
+      <a href="#menu" onclick="closeMobile()">Menu &amp; Pricing</a>
+      <a href="#areas" onclick="closeMobile()">Areas We Serve</a>
+      <a href="#contact" onclick="closeMobile()">Contact</a>
+      <a class="btn small" href="#portal" onclick="closeMobile()">Register / Login</a>
+    </nav>
+    <button class="mobile-toggle" onclick="document.getElementById('navlinks').classList.toggle('open')">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="badge-serving"><span class="dot"></span> Now delivering in Jagraon, Ludhiana &amp; nearby villages</div>
+        <h1>Real home food.<br>Not a <span class="accent">restaurant guess.<span class="circle-mark" id="circleMarkHolder"></span></span></h1>
+        <p class="lede">TiffinX cooks breakfast, lunch and dinner the way your ghar does — fresh, hygienic, and delivered on time, every day. No fake ingredients. No mess. Just honest tiffin.</p>
+        <div class="hero-ctas">
+          <a href="#portal" class="btn">Register for a Tiffin Plan →</a>
+          <a href="#menu" class="btn outline">See Menu &amp; Pricing</a>
+        </div>
+        <div class="hero-note">↳ psst — scroll to "Why Us" to see what you're really eating elsewhere</div>
+        <div class="stat-strip">
+          <div class="stat"><b>3x</b><span>Meals a day, cooked fresh</span></div>
+          <div class="stat"><b>100%</b><span>Home-style, zero preservatives</span></div>
+          <div class="stat"><b>0</b><span>Compromises on hygiene</span></div>
+        </div>
+      </div>
+      <div class="hero-card corner-fold">
+        <!-- Put your own photo here as images/hero-photo.jpg (any size, will auto-fit) -->
+        <img src="images/hero-photo.jpg" alt="Real TiffinX home-style meal" style="width:100%;height:auto;border-radius:2px;display:block;"
+             onerror="this.style.display='none'; document.getElementById('tiffinArt').style.display='block';">
+        <canvas id="tiffinArt" width="520" height="480" style="width:100%;height:auto;border-radius:2px;display:none;"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="torn-divider" data-color="#FBF7EC"></div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="wrap">
+    <div class="eyebrow">✎ how it works</div>
+    <h2 class="section-title">From our kitchen to your table<span class="scribble-under"></span></h2>
+    <p class="section-sub">Three simple steps — same as how your mother would run it, just organised.</p>
+    <div class="steps-wrap">
+      <div class="step corner-fold"><div class="num">1</div><h3>Choose your plan</h3><p>Pick breakfast, lunch, dinner or all three. Veg or non-veg. Tell us your allergies once — we remember.</p></div>
+      <div class="step-arrow">✎→</div>
+      <div class="step corner-fold"><div class="num">2</div><h3>We cook it fresh</h3><p>Educated, trained food handlers cook daily in a hygienic kitchen. Nothing pre-made, nothing sitting around.</p></div>
+      <div class="step-arrow">✎→</div>
+      <div class="step corner-fold"><div class="num">3</div><h3>Delivered &amp; tracked</h3><p>You get notified when it's on the way, and again when it's delivered — with a photo, every single day.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="torn-divider" data-color="#F3EEDF"></div>
+
+<!-- WHY US -->
+<section class="why-bg" id="why">
+  <div class="wrap">
+    <div class="eyebrow">✎ the honest comparison</div>
+    <h2 class="section-title">Why not just order from a restaurant?<span class="scribble-under"></span></h2>
+    <p class="section-sub">Go on, Google "restaurant kitchen hygiene violations" and see what comes up. Then compare that to how we run our kitchen.</p>
+
+    <div class="compare">
+      <div class="compare-card corner-fold">
+        <div class="compare-head bad">⚠ What restaurants rarely show you</div>
+        <div class="compare-body">
+          <div class="compare-illustration">
+            <!-- Put a real photo as images/other-kitchens.jpg, or a video as videos/other-kitchens.mp4 -->
+            <video src="videos/other-kitchens.mp4" controls playsinline style="width:100%;border-radius:4px;display:block;"
+                   onerror="this.style.display='none'; document.getElementById('badImgFallback').style.display='block';"></video>
+            <img id="badImgFallback" src="images/other-kitchens.jpg" alt="" style="width:100%;border-radius:4px;display:none;"
+                 onerror="this.style.display='none';">
+          </div>
+          <ul>
+            <li>Mass-cooked hours in advance, reheated on order</li>
+            <li>Untrained or under-trained kitchen staff</li>
+            <li>Preservatives &amp; taste-enhancers to mask staleness</li>
+            <li>No transparency on who cooked your food, or how</li>
+          </ul>
+        </div>
+      </div>
+      <div class="compare-card corner-fold">
+        <div class="compare-head good">✓ What you get with TiffinX</div>
+        <div class="compare-body">
+          <div class="compare-illustration">
+            <!-- Put your real kitchen video as videos/our-kitchen.mp4, or a photo as images/our-kitchen.jpg -->
+            <video src="videos/our-kitchen.mp4" controls playsinline style="width:100%;border-radius:4px;display:block;"
+                   onerror="this.style.display='none'; document.getElementById('goodImgFallback').style.display='block';"></video>
+            <img id="goodImgFallback" src="images/our-kitchen.jpg" alt="" style="width:100%;border-radius:4px;display:none;"
+                 onerror="this.style.display='none';">
+          </div>
+          <ul>
+            <li>Cooked same-day, portioned for your delivery slot</li>
+            <li>Educated staff, trained food handlers</li>
+            <li>Home-style recipes, real ingredients, no shortcuts</li>
+            <li>Fully transparent — ask us anything, anytime</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="upload-note">✎ Admin note: this is where unhygienic kitchen photos (yours or publicly reported ones) get uploaded to make the comparison real for customers.</p>
+
+    <div class="trust-grid" style="margin-top:46px;">
+      <div class="trust-card"><div class="ic" id="ic1"></div><h4>Fully Hygienic</h4><p>Every kitchen follows a strict cleanliness routine, checked daily.</p></div>
+      <div class="trust-card"><div class="ic" id="ic2"></div><h4>Educated Staff</h4><p>Trained food handlers who understand food safety, not just cooking.</p></div>
+      <div class="trust-card"><div class="ic" id="ic3"></div><h4>No Fake Ingredients</h4><p>Real spices, real ghee, real vegetables. Home-made taste, always.</p></div>
+      <div class="trust-card"><div class="ic" id="ic4"></div><h4>Fully Transparent</h4><p>We're not hiding anything. Visit, ask, or watch how it's made.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="torn-divider" data-flip="true" data-color="#FBF7EC"></div>
+
+<!-- MENU / PRICING -->
+<section id="menu">
+  <div class="wrap">
+    <div class="eyebrow">✎ menu &amp; pricing</div>
+    <h2 class="section-title">Pick your plan<span class="scribble-under"></span></h2>
+    <p class="section-sub">Simple, honest pricing — no hidden charges. Prices below are starting estimates for one person; final quote depends on meals chosen and your locality.</p>
+
+    <div class="veg-toggle">
+      <button class="active" onclick="setVeg(this,'veg')">🌱 Veg</button>
+      <button onclick="setVeg(this,'nonveg')">🍗 Non-Veg</button>
+    </div>
+
+    <div class="plans">
+      <div class="plan-card corner-fold">
+        <div class="plan-name">the starter</div>
+        <div class="plan-title">Single Meal Plan</div>
+        <div class="plan-price">₹90<span>/meal</span></div>
+        <ul>
+          <li>✓ Choose breakfast, lunch <em>or</em> dinner</li>
+          <li>✓ Roti, sabzi, dal/rice, salad</li>
+          <li>✓ Daily delivery photo update</li>
+          <li>✓ Pause or cancel anytime</li>
+        </ul>
+        <a href="#portal" onclick="selectPlan('Single Meal (Trial)')" class="btn small outline" style="width:100%; justify-content:center;">Choose Plan</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-pin"></div>
+        <div class="plan-name">most loved</div>
+        <div class="plan-title">Full Day Plan</div>
+        <div class="plan-price">₹220<span>/day</span></div>
+        <ul>
+          <li>✓ Breakfast + Lunch + Dinner</li>
+          <li>✓ Rotating weekly home-style menu</li>
+          <li>✓ Live tracking on every delivery</li>
+          <li>✓ Priority support on WhatsApp</li>
+        </ul>
+        <a href="#portal" onclick="selectPlan('Full Day Plan')" class="btn small" style="width:100%; justify-content:center;">Choose Plan</a>
+      </div>
+      <div class="plan-card corner-fold">
+        <div class="plan-name">for the committed</div>
+        <div class="plan-title">Monthly Subscription</div>
+        <div class="plan-price">₹5,800<span>/month</span></div>
+        <ul>
+          <li>✓ All 3 meals, every day, 30 days</li>
+          <li>✓ Calendar &amp; billing dashboard</li>
+          <li>✓ Extra tiffin / special dish add-ons</li>
+          <li>✓ Best value — save vs daily pricing</li>
+        </ul>
+        <a href="#portal" onclick="selectPlan('Monthly Subscription')" class="btn small outline" style="width:100%; justify-content:center;">Choose Plan</a>
+      </div>
+    </div>
+
+    <div class="catering-banner">
+      <div>
+        <h3>Hosting a big gathering?</h3>
+        <p>Weddings, kitty parties, office events, religious functions — we cater fresh, home-style food for large groups across Ludhiana &amp; Jagraon.</p>
+      </div>
+      <a href="#portal" class="btn orange">Enquire About Catering</a>
+    </div>
+  </div>
+</section>
+
+<div class="torn-divider" data-color="#F3EEDF"></div>
+
+<!-- PORTAL: REGISTER / DASHBOARD -->
+<section class="portal-bg" id="portal">
+  <div class="wrap">
+    <div class="eyebrow">✎ customer portal</div>
+    <h2 class="section-title">Register, track, and manage your tiffin<span class="scribble-under"></span></h2>
+    <p class="section-sub">Fill the form once. After that, everything — your calendar, delivery photos, and billing — lives in your dashboard.</p>
+
+    <div class="portal-tabs">
+      <button class="portal-tab active" id="tabRegister" onclick="showPortal('register')">1. Register</button>
+      <button class="portal-tab" id="tabDashboard" onclick="showPortal('dashboard')">2. My Dashboard</button>
+    </div>
+
+    <div class="portal-panel active" id="panel-register">
+      <div class="notebook">
+        <div class="notebook-margin"></div>
+        <form id="registerForm" onsubmit="return submitRegister(event)">
+          <div class="form-grid">
+            <div class="field"><label>Full Name</label><input id="regName" type="text" required placeholder="e.g. Simran Kaur"></div>
+            <div class="field"><label>Phone Number</label><input id="regPhone" type="tel" required placeholder="+91 98xxxxxxx0"></div>
+            <div class="field full"><label>Delivery Address</label><input id="regAddress" type="text" required placeholder="House no., street, landmark"></div>
+            <div class="field"><label>Area</label>
+              <select id="regArea" required>
+                <option value="">Select your area</option>
+                <option>Ludhiana</option>
+                <option>Jagraon</option>
+                <option>Village Mallah</option>
+                <option>Other nearby area</option>
+              </select>
+            </div>
+            <div class="field"><label>Email (used to log in later)</label><input id="regEmail" type="email" required placeholder="you@example.com"></div>
+            <div class="field"><label>Create a Password</label><input id="regPassword" type="password" required minlength="6" placeholder="At least 6 characters"></div>
+            <div class="field full">
+              <label>Veg or Non-Veg</label>
+              <div class="radio-row">
+                <label class="radio-pill veg-pill checked" id="vegPillReg"><input type="radio" name="vegtype" checked onclick="pickVegType('veg')">🌱 Veg</label>
+                <label class="radio-pill nonveg-pill" id="nonvegPillReg"><input type="radio" name="vegtype" onclick="pickVegType('nonveg')">🍗 Non-Veg</label>
+              </div>
+            </div>
+            <div class="field full">
+              <label>Meal Times Needed</label>
+              <div class="check-row">
+                <label class="check-pill"><input id="mealBreakfast" type="checkbox" checked> Breakfast</label>
+                <label class="check-pill"><input id="mealLunch" type="checkbox" checked> Lunch</label>
+                <label class="check-pill"><input id="mealDinner" type="checkbox" checked> Dinner</label>
+              </div>
+            </div>
+            <div class="field"><label>Plan Duration</label>
+              <select id="regPlan">
+                <option>Single Meal (Trial)</option>
+                <option selected>Full Day Plan</option>
+                <option>Monthly Subscription</option>
+                <option>Custom / Catering</option>
+              </select>
+            </div>
+            <div class="field"><label>Preferred Delivery Time</label>
+              <select id="regTime">
+                <option>Morning (7–9 AM)</option>
+                <option>Afternoon (12–2 PM)</option>
+                <option>Evening (7–9 PM)</option>
+                <option>All three</option>
+              </select>
+            </div>
+            <div class="field full"><label>Allergies / Health Notes</label><textarea id="regNotes" placeholder="e.g. no peanuts, low oil for patient diet, gluten-free etc."></textarea></div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn" id="regSubmitBtn">Register with TiffinX ✎</button>
+            <span class="form-note">We'll contact you within a few hours to confirm your plan and start date.</span>
+          </div>
+          <div class="success-box" id="successBox">✓ Thanks! Your details are in. Our team will call you shortly — meanwhile, check out your dashboard below.</div>
+          <div class="success-box" id="errorBox" style="display:none; background:#fdecea; color:#b3261e;"></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="portal-panel" id="panel-dashboard">
+      <div class="notebook" id="loginBox">
+        <div class="notebook-margin"></div>
+        <div class="form-grid" style="max-width:420px;">
+          <div class="field full"><label>Email</label><input id="loginEmail" type="email" placeholder="you@example.com"></div>
+          <div class="field full"><label>Password</label><input id="loginPassword" type="password" placeholder="Your password"></div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn" onclick="doLogin()">Log In</button>
+          <span class="form-note">New here? Use the Register tab — that creates your login too.</span>
+        </div>
+        <div class="success-box" id="loginErrorBox" style="display:none; background:#fdecea; color:#b3261e;"></div>
+      </div>
+
+      <div id="dashContent" style="display:none;">
+        <div class="form-actions" style="margin-bottom:14px;">
+          <span class="form-note" id="welcomeNote">Welcome back!</span>
+          <button type="button" class="btn small outline" onclick="doLogout()">Log Out</button>
+        </div>
+      <div class="dash-grid">
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <div class="card corner-fold">
+            <h3>📦 Your Plan Status</h3>
+            <div id="statusBadgeWrap" style="margin-bottom:10px;"></div>
+            <div class="timeline" id="timeline">
+              <div class="tl-fill" id="tlFill" style="width:0%"></div>
+              <div class="tl-step" id="tls1"><div class="tl-dot">✓</div><span class="lbl">Registered</span></div>
+              <div class="tl-step" id="tls2"><div class="tl-dot">👍</div><span class="lbl">Confirmed</span></div>
+              <div class="tl-step" id="tls3"><div class="tl-dot">🍲</div><span class="lbl">Active</span></div>
+            </div>
+            <p style="font-size:13px; color:var(--ink-soft); margin-top:10px;">Our team updates this as your plan moves from registered to confirmed to active. No action needed from you.</p>
+          </div>
+
+          <div class="card">
+            <h3>📋 Your Registered Details</h3>
+            <div id="detailsRecap" style="font-size:13.5px; line-height:1.9;">Loading...</div>
+          </div>
+
+          <div class="card">
+            <h3>✎ Update / Add Information</h3>
+            <p style="font-size:13px; color:var(--ink-soft); margin-bottom:10px;">Need to add allergy info, change your address, or tell us something else? Send it here — our team will see it and can update your plan.</p>
+            <textarea id="extraInfoInput" rows="3" style="width:100%; box-sizing:border-box; padding:10px; border-radius:6px; border:1px solid #ddd; font-family:inherit;" placeholder="e.g. Please deliver to the back gate after 7pm"></textarea>
+            <button class="btn small" style="margin-top:10px;" onclick="submitExtraInfo()">Send to TiffinX Team</button>
+            <div id="extraInfoNote" style="font-size:12.5px; color:var(--leaf-dark); margin-top:8px;"></div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <div class="card corner-fold" style="display:flex; flex-direction:column; height:480px;">
+            <h3>💬 Chat with TiffinX Support</h3>
+            <div id="chatMessages" style="flex:1; overflow-y:auto; border:1px solid #eee; border-radius:6px; padding:10px; margin:10px 0; background:#fff;"></div>
+            <div style="display:flex; gap:8px;">
+              <input id="chatInput" type="text" placeholder="Type a message..." style="flex:1; padding:9px; border-radius:6px; border:1px solid #ddd;" onkeydown="if(event.key==='Enter'){sendChatMessage();}">
+              <button class="btn small" onclick="sendChatMessage()">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter-section">
+  <div class="wrap">
+    <div class="newsletter">
+      <div>
+        <h3>Stay in the loop 📬</h3>
+        <p>Get our monthly newsletter with new menu items, health tips, and community offers — plus a weekly WhatsApp update on what's cooking.</p>
+        <label class="wa-opt"><input type="checkbox" id="nlWhatsappOptIn" checked> Also send me weekly updates on WhatsApp</label>
+      </div>
+      <div>
+        <form class="nl-form" onsubmit="return subscribeNewsletter(event)">
+          <input type="email" required placeholder="Enter your email">
+          <input type="tel" required placeholder="WhatsApp number">
+          <button type="submit" class="btn orange" style="width:100%; justify-content:center;">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AREAS -->
+<section id="areas">
+  <div class="wrap">
+    <div class="eyebrow">✎ where we deliver</div>
+    <h2 class="section-title">Currently serving<span class="scribble-under"></span></h2>
+    <p class="section-sub">If you're just outside these areas, register anyway — we're expanding fast.</p>
+    <div class="areas-grid">
+      <div class="area-card corner-fold"><div>📍</div><div><h4>Ludhiana</h4><p>Full city coverage across major residential &amp; commercial zones.</p></div></div>
+      <div class="area-card corner-fold"><div>📍</div><div><h4>Jagraon</h4><p>Daily breakfast, lunch &amp; dinner delivery across town.</p></div></div>
+      <div class="area-card corner-fold"><div>📍</div><div><h4>Village Mallah &amp; nearby</h4><p>Serving the village and surrounding rural belt on request.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:14px;"><img src="images/logo.png" alt="TiffinX" style="height:38px; filter:brightness(0) invert(1);"></div>
+        <p style="color:#9AA3AF; font-size:13.5px; max-width:280px;">Fresh, healthy, hygienic home-style meals — delivered daily across Ludhiana, Jagraon &amp; nearby villages.</p>
+      </div>
+      <div>
+        <h5>Explore</h5>
+        <a href="#why">Why TiffinX</a>
+        <a href="#menu">Menu &amp; Pricing</a>
+        <a href="#portal">Register / Login</a>
+        <a href="#areas">Areas We Serve</a>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <a href="tel:+919XXXXXXXXX" class="icon-link"><svg viewBox="0 0 16 16" class="ic-svg"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/></svg> +91 9XXXX-XXXXX</a>
+        <a href="mailto:hello@tiffinx.in" class="icon-link"><svg viewBox="0 0 16 16" class="ic-svg"><path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/></svg> hello@tiffinx.in</a>
+        <a href="https://wa.me/919XXXXXXXXX" target="_blank" rel="noopener" class="icon-link"><svg viewBox="0 0 16 16" class="ic-svg"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg> WhatsApp Us</a>
+      </div>
+      <div>
+        <h5>Follow Us</h5>
+        <a href="https://instagram.com/YOUR_USERNAME" target="_blank" rel="noopener" class="icon-link"><svg viewBox="0 0 16 16" class="ic-svg"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/></svg> Instagram</a>
+        <a href="https://facebook.com/YOUR_PAGE" target="_blank" rel="noopener" class="icon-link"><svg viewBox="0 0 16 16" class="ic-svg"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg> Facebook</a>
+        <a href="https://g.page/r/YOUR_GOOGLE_ID/review" target="_blank" rel="noopener" class="icon-link"><svg viewBox="0 0 16 16" class="ic-svg"><path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z"/></svg> Google Reviews</a>
+      </div>
+      <div>
+        <h5>Serving</h5>
+        <a href="#">Ludhiana</a>
+        <a href="#">Jagraon</a>
+        <a href="#">Village Mallah</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 TiffinX. Fresh. Healthy. Hygienic.</span>
+      <span>Home-style meals, every day.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/main.js"></script>
+<script type="module" src="js/firebase-config.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
